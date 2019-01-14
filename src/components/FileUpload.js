@@ -15,7 +15,7 @@ class FileUpload extends Component {
     for (var i = 0; i < event.target.files.length; i++) {
       images[i] = event.target.files.item(i);
     }
-    images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif)$/));
+    images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif)|pdf$/));
     let message = `${images.length} valid image(s) selected`;
     this.setState({
       images,
