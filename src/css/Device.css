@@ -47,3 +47,8 @@ input[type=button], input[type=submit], input[type=reset] {
   text-align: center;
   margin-top: 60px;
 }
+.selectBox{
+  margin-left: 737px;
+  width:500px;
+  height:30px
+}

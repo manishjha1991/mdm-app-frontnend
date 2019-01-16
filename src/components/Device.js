@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Select from 'react-select'
 import '../css/Device.css';
 export default class NewRecord extends Component {
     constructor(props) {
@@ -12,35 +13,21 @@ export default class NewRecord extends Component {
             fullName:'',
             contactNumber:'',
             emailId:'',
-            create_network_app:{
-                isActive:''
-              },
-              hi_5_app:{
-               isActive:''
-              },
-              self_serve_app:{
-                isActive:''
-              },
-              qudini_greeter_app:{
-                isActive:''
-              },
-              airtel_tv_app:{
-                isActive:''
-              },
-              consultation_hub_app:{
-                isActive:''
-              },
-              fast_lane_app:{
-               isActive:''
-              },
-              digitalOR_app:{
-                isActive:''
-              },
-              screenSaver:{
-                videoLink:String,
-                
-              },
-              wallpaper:{
+            apps : [
+                {label:"Create Network App",value:"create_network_app"},
+                {label:"HI 5 App",value:"hi_5_app"},
+                {label:"Self Server App",value:"self_serve_app"},
+                {label:"Qudini greeter App",value:"qudini_greeter_app"},
+                {label:"Airtel TV App",value:"airtel_tv_app"},
+                {label:"Consultation hub App",value:"consultation_hub_app"},
+                {label:"Fast lane App",value:"fast_lane_app"},
+                {label:"DigitalOr App",value:"digitalOR_app"},
+            ],
+            selectedApps:[],
+            screenSaver:{
+                videoLink:String,   
+            },
+            wallpaper:{
                 imageLink:String,
                 
               },
@@ -82,7 +69,14 @@ export default class NewRecord extends Component {
               },
             
         };
-    
+        this.state.apps.forEach(app=>{
+            if(this.state.selectedApps.find(a=>{return a.value=== app.value })){
+                data[app.value] = {isActive:true}
+            }else{
+                data[app.value] = {isActive:false}
+            }
+           
+        })
          fetch("http://localhost:3000/device", {
                 method: 'POST',
                 headers: {
@@ -115,7 +109,6 @@ export default class NewRecord extends Component {
         this.setState({ emailId: event.target.value});
     }
     render() {
-        console.log(this.state)
         return (
             <form className='form__row' method='POST' onSubmit={this.handleSubmit}>
          <label for="Select Circle"><b>Select Circle</b></label>   
@@ -157,6 +150,15 @@ export default class NewRecord extends Component {
                     placeholder="Email"
                     value={this.state.emailId}
                     onChange={this.handleStoreEmailIdChange}
+                />
+                <br/>
+                <label for="Store Manager Name"><b>Select App</b></label>  
+                <Select 
+                    className="selectBox"
+                    options={this.state.apps} 
+                    value={this.state.selectedApps}
+                    onChange={selectedApps=>this.setState({selectedApps})}
+                    isMulti
                 />
                 <br/>
                 <input className ="input5" type="submit" value="Submit"/>
