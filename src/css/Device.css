@@ -43,6 +43,9 @@ input[type=button], input[type=submit], input[type=reset] {
 .input6{
   margin-left: 20px;
 }
+.input7{
+  margin-left: 200px;
+}
 .label1{
   text-align: center;
   margin-top: 60px;

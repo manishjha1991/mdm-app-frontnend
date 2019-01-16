@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import Select from 'react-select'
+import axios, { post } from 'axios';
 import '../css/Device.css';
+
+
+
+
+
 export default class NewRecord extends Component {
     constructor(props) {
         super(props);
@@ -13,6 +19,7 @@ export default class NewRecord extends Component {
             fullName:'',
             contactNumber:'',
             emailId:'',
+            file:null,
             apps : [
                 {label:"Create Network App",value:"create_network_app"},
                 {label:"HI 5 App",value:"hi_5_app"},
@@ -24,20 +31,18 @@ export default class NewRecord extends Component {
                 {label:"DigitalOr App",value:"digitalOR_app"},
             ],
             selectedApps:[],
-            screenSaver:{
-                videoLink:String,   
-            },
-            wallpaper:{
-                imageLink:String,
-                
-              },
+            screenSaver:'',
+            wallpaper:''
         };
         this.handleCircleChange= this.handleCircleChange.bind(this);
         this.handleStoreFullChange = this.handleStoreFullChange.bind(this);
         this.handleStoreContactNumberChange = this.handleStoreContactNumberChange.bind(this);
         this.handleStoreEmailIdChange = this.handleStoreEmailIdChange.bind(this);
         this.handleStoreNameChange = this.handleStoreNameChange.bind(this);
+        this.fileUpload = this.fileUpload.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this)
+        this.onChange = this.onChange.bind(this)
     }
     componentDidMount() {
         fetch("http://localhost:3000/circle")
@@ -67,8 +72,12 @@ export default class NewRecord extends Component {
                 contactNumber:this.state.contactNumber,
                 emailId:this.state.emailId,
               },
+             wallpaper:{
+                imageLink:this.state.wallpaper
+             } 
             
         };
+        console.log(data)
         this.state.apps.forEach(app=>{
             if(this.state.selectedApps.find(a=>{return a.value=== app.value })){
                 data[app.value] = {isActive:true}
@@ -77,7 +86,8 @@ export default class NewRecord extends Component {
             }
            
         })
-         fetch("http://localhost:3000/device", {
+        if(data.wallpaper.imageLink){
+            fetch("http://localhost:3000/device", {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -89,6 +99,11 @@ export default class NewRecord extends Component {
                 .then(response => response.json())
                 .then(data => console.log(data))
                 .catch(error => console.log(error));
+        }
+        else{
+            console.log("upload is not succeed")
+        }
+        
     
        
     }
@@ -108,7 +123,29 @@ export default class NewRecord extends Component {
     handleStoreEmailIdChange(event) {
         this.setState({ emailId: event.target.value});
     }
+    onFormSubmit(e){
+        e.preventDefault() // Stop form submit
+        this.fileUpload(this.state.file).then((response)=>{
+            this.setState({wallpaper:response.data})
+        })
+      }
+      onChange(e) {
+        this.setState({file:e.target.files[0]})
+      }
+      fileUpload(file){
+        const url = 'http://localhost:3000/upload';
+        const formData = new FormData();
+        formData.append('file',file)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return  post(url, formData,config)
+      }
+    
     render() {
+       console.log(this.state.file)
         return (
             <form className='form__row' method='POST' onSubmit={this.handleSubmit}>
          <label for="Select Circle"><b>Select Circle</b></label>   
@@ -161,8 +198,16 @@ export default class NewRecord extends Component {
                     isMulti
                 />
                 <br/>
-                <input className ="input5" type="submit" value="Submit"/>
+                
+                
+                <form onSubmit={this.onFormSubmit}>
+                <label for="Store Manager Name"><b>wallpaper</b></label> 
+                  <input className="input7" type="file" onChange={this.onChange} />
+                  <button type="submit">Upload</button>
+               </form>
+               <input className ="input5" type="submit" value="Submit"/>
             </form>
+            
         );
     }
     }
