@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../css/Device.css';
 export default class NewRecord extends Component {
     constructor(props) {
         super(props);
@@ -117,36 +118,48 @@ export default class NewRecord extends Component {
         console.log(this.state)
         return (
             <form className='form__row' method='POST' onSubmit={this.handleSubmit}>
-               <select className="dropdown-content" value={this.state.circleId}
-            onChange={this.handleCircleChange}
-          >
+         <label for="Select Circle"><b>Select Circle</b></label>   
+         <select className="dropdown-content"  value={this.state.circleId}onChange={this.handleCircleChange}>
           {this.state.circles.map((circle) => <option key={circle.circleId} value={circle.circleId} name={circle.circleName}  >{circle.circleName}</option>)}
         </select>
+        <br/>
+          <label for="Store Name"><b>Enter Store Name</b></label>   
                 <input
+                    className="input2"
                     type="text"
-                    placeholder="STORE_NAME"
+                    placeholder="Store Name"
                     value={this.state.storeName}
                     onChange={this.handleStoreNameChange}
                 />
-                <input
+                <br/>
+                <label for="Store Manager Name"><b>Enter Store Manager Full Name</b></label>  
+                <input 
+                    className="input1"
                     type="text"
-                    placeholder="STORE_MANAGER_FULL_NAME"
+                    placeholder="First  Middle  Last"
                     value={this.state.fullName}
                     onChange={this.handleStoreFullChange}
                 />
+                <br/>
+                <label for="Store Manager Name"><b>Enter Store Manager Contact Number</b></label>  
                 <input
+                    className="input3"
                     type="text"
-                    placeholder="STORE_MANAGER_CONTACT_NUMBER"
+                    placeholder="Mobile"
                     value={this.state.contactNumber}
                     onChange={this.handleStoreContactNumberChange}
                 />
+                <br/>
+                <label for="Store Manager Name"><b>Enter Store Manager EmailId</b></label>  
                 <input
+                    className="input4"
                     type="text"
-                    placeholder="STORE_MANAGER_EMAIL_ID"
+                    placeholder="Email"
                     value={this.state.emailId}
                     onChange={this.handleStoreEmailIdChange}
                 />
-                <button type='submit'>save</button>
+                <br/>
+                <input className ="input5" type="submit" value="Submit"/>
             </form>
         );
     }

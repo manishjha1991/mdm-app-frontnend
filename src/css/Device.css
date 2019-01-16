@@ -1,0 +1,49 @@
+.dropdown-content {
+    padding-bottom: 15px;
+    margin-left: 641px;
+  }
+  input{
+    width: 500px;
+    margin-top: 30px;
+    
+  }
+  .input1{
+    
+    margin-left: 500px;
+    
+}
+.input2{
+ 
+  margin-left: 604px;
+  
+}
+.input3{
+  
+  margin-left: 449px;
+  
+}
+.input4{
+  
+  margin-left: 518px;
+  
+}
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  /* margin: 4px 2px; */
+  cursor: pointer;
+}
+.input5{
+  margin-left: 449px;
+  margin-top: 60px;
+}
+.input6{
+  margin-left: 20px;
+}
+.label1{
+  text-align: center;
+  margin-top: 60px;
+}
