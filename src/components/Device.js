@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import "../css/Device.css";
+import axios, { post } from "axios";
 import HeaderComponent from "./HeaderComponent";
 export default class NewRecord extends Component {
   constructor(props) {
@@ -69,6 +70,9 @@ export default class NewRecord extends Component {
         contactNumber: this.state.contactNumber,
         emailId: this.state.emailId
       },
+      wallpaper: {
+        imageLink: this.state.wallpaper
+      },
       appInfo: []
     };
     this.state.apps.forEach(app => {
@@ -82,21 +86,25 @@ export default class NewRecord extends Component {
         data.appInfo.push({ appName: app.value, isActive: false });
       }
     });
-    fetch("http://localhost:3000/device", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      mode: "cors",
-      body: JSON.stringify(data)
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.showSuccess();
-        console.log(data);
+    if (data.wallpaper.imageLink) {
+      fetch("http://localhost:3000/device", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        mode: "cors",
+        body: JSON.stringify(data)
       })
-      .catch(error => console.log(error));
+        .then(response => response.json())
+        .then(data => {
+          this.showSuccess();
+          console.log(data);
+        })
+        .catch(error => console.log(error));
+    } else {
+      console.log("upload is not succeed");
+    }
   }
   showSuccess = () => {
     this.setState({
@@ -126,6 +134,27 @@ export default class NewRecord extends Component {
   handleStoreEmailIdChange(event) {
     this.setState({ emailId: event.target.value });
   }
+  onFormSubmit = e => {
+    e.preventDefault(); // Stop form submit
+    this.fileUpload(this.state.file).then(response => {
+      this.setState({ wallpaper: response.data });
+    });
+  };
+  onChange = e => {
+    this.setState({ file: e.target.files[0] });
+  };
+  fileUpload(file) {
+    const url = "http://localhost:3000/upload";
+    const formData = new FormData();
+    formData.append("file", file);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    };
+    return post(url, formData, config);
+  }
+
   render() {
     return (
       <div>
@@ -206,6 +235,15 @@ export default class NewRecord extends Component {
               onChange={selectedApps => this.setState({ selectedApps })}
               isMulti
             />
+          </div>
+          <div className="row">
+            <label for="Store Manager Name">
+              <b>wallpaper</b>
+            </label>
+            <input className="input7" type="file" onChange={this.onChange} />
+            <button onClick={this.onFormSubmit} type="submit">
+              Upload
+            </button>
           </div>
           <div className="row">
             <input className="btnClass" type="submit" value="Submit" />
